@@ -6,11 +6,11 @@
                 <hr>
                 <button class="btn btn-primary" @click="show=!show">Show Alert</button>
                 <br><br>
-                <!-- <transition name="fade">
+                <transition name="fade" appear>
                 <div class="alert alert-info" v-if="show">This is some Info</div>
-                </transition> -->
-                 <transition name="slide" type="animation">
-                <div class="alert alert-info" v-if="show">This is some Info</div>
+                </transition>
+                 <transition name="slide" type="animation" appear>
+                <div class="alert alert-info" v-show="show">This is some Info</div>
                 </transition>
             </div>
         </div>
@@ -21,7 +21,7 @@
     export default {
         data() {
             return {
-                show: false
+                show: true
             }
         }
     }
