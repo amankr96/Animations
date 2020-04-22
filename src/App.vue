@@ -8,7 +8,7 @@
                     <option value="fade">fade</option>
                     <option value="slide">Slide</option>
                     </select>
-                    <br><br>
+                    <br>
                 <button class="btn btn-primary" @click="show=!show">Show Alert</button>
                 <br><br>
                 <!-- <transition :name="alertAnimation">
@@ -46,17 +46,29 @@
                 <hr>
                 <button class="btn btn-primary"
                  @click="selectedComponent == 'app-success-alert' ? selectedComponent = 'app-danger-alert' : selectedComponent = 'app-success-alert'">Toggle Components</button>
-                <br>
+                <br><br>
                 <transition name="fade" mode="out-in">
                 <component :is="selectedComponent"></component>
                 </transition>
+                <hr>
+                <button class="btn primary" @click="addItem">Add Item</button>
+                <br><br>
+                <ul class="list-group">
+                    <transition-group name="slide">
+                    <li class="list-group-item" 
+                        v-for="(item, index) in numbers" 
+                        @click="removeItem(index)"
+                        style="cursor: pointer"
+                        :key="item">{{ item }}</li>
+                    </transition-group>
+                </ul>
             </div>
-        </div>
+        </div>  
     </div>
 </template>
 
 <script>
-import dangerAlert from './DangerAlert.vue';
+import DangerAlert from './DangerAlert.vue';
 import SuccessAlert from  './SuccessAlert.vue';
     export default {
         data() {
@@ -65,7 +77,8 @@ import SuccessAlert from  './SuccessAlert.vue';
                 load: true,
                 alertAnimation: 'fade',
                 elementWidth: 100,
-                selectedComponent: 'app-success-alert'
+                selectedComponent: 'app-success-alert',
+                numbers: [1,2,3,4,5]
             }
         },
         methods:{
@@ -115,10 +128,19 @@ import SuccessAlert from  './SuccessAlert.vue';
             },
             leaveCancelled(el){
                 console.log('leaveCancelled');
+            },
+            addItem(){
+            const pos = Math.floor(Math.random() * this.numbers.length); //**determining the position of the insertion randomly
+            this.numbers.splice(pos, 0, this.numbers.length +1); //**adding the number. 0 after pos bacause we don't want to delete any number.Instead add a number which is not currenty present in the list.
+                //this.numbers.push(6,7,8);
+            },
+            removeItem(index){
+                this.numbers.splice(index, 1);   // **any of the two codes works fine**
+              // this.$delete(this.numbers, index, 1);
             }
         },
         components: {
-            appDangerAlert: dangerAlert,
+            appDangerAlert: DangerAlert,
             appSuccessAlert: SuccessAlert 
         }
     }
@@ -153,6 +175,10 @@ import SuccessAlert from  './SuccessAlert.vue';
          animation: slide-out 1s ease-out forwards;
          transition: opacity 1s;
          opacity: 0;
+         position: absolute;
+    }
+    .slide-move{
+        transition: transform 1s;
     }
     @keyframes slide-in {
         from{
